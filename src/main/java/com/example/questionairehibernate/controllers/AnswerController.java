@@ -4,6 +4,7 @@ import com.example.questionairehibernate.entities.Answer;
 import com.example.questionairehibernate.entities.Question;
 import com.example.questionairehibernate.entities.User;
 import com.example.questionairehibernate.repositories.AnswerRepository;
+import com.example.questionairehibernate.repositories.QuestionRepository;
 import com.example.questionairehibernate.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public class AnswerController {
   @Autowired
   AnswerRepository answerRepository;
   UserRepository userRepository;
+  QuestionRepository questionRespository;
 
   @PostMapping(value = "/answers/{id}")
   public void updateAnswer(@RequestBody Answer answer, @PathVariable("id") long id) {
@@ -35,7 +37,7 @@ public class AnswerController {
 
   @PostMapping(value = "/questions/{id}/answers")
   public void addAnswer(@RequestBody Answer answer, @PathVariable("questionId") long questionId) {
-    Question question = questionRepository.findById(questionId).orElse(new Question());
+    Question question = questionRespository.findById(questionId).orElse(new Question());
     if (question.getId() != null) {
       answer.setQuestionId(questionId);
       answerRepository.save(answer);
